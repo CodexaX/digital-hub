@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0a0a0f" />
+  <title>QR Codes — Binesh Bidari</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #0a0a0f;
+      --glass:  rgba(255,255,255,0.06);
+      --border: rgba(255,255,255,0.11);
+      --text:   #f1f5f9;
+      --muted:  #94a3b8;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg); color: var(--text);
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 40px 20px; gap: 32px;
+    }
+
+    /* Background orbs */
+    .orb {
+      position: fixed; border-radius: 50%; filter: blur(90px);
+      opacity: 0.25; z-index: 0; pointer-events: none;
+    }
+    .orb-1 { width: 400px; height: 400px; background: #6d28d9; top: -120px; left: -120px; }
+    .orb-2 { width: 300px; height: 300px; background: #1d4ed8; bottom: -80px; right: -80px; }
+
+    /* All content above orbs */
+    body > *:not(.orb) { position: relative; z-index: 1; }
+
+    /* ── Header ── */
+    .header { text-align: center; }
+    .header-name {
+      font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #e9e3ff, #a78bfa, #60a5fa);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .header-sub { font-size: 0.82rem; color: var(--muted); margin-top: 4px; }
+
+    /* ── URL input ── */
+    .url-bar {
+      width: 100%; max-width: 500px;
+      background: var(--glass); border: 1px solid var(--border);
+      border-radius: 16px; padding: 12px 16px;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .url-bar label { font-size: 0.75rem; color: var(--muted); white-space: nowrap; flex-shrink: 0; }
+    .url-bar input {
+      flex: 1; background: transparent; border: none; outline: none;
+      color: var(--text); font-family: 'Inter', sans-serif; font-size: 0.83rem;
+      min-width: 0;
+    }
+    .url-bar input::placeholder { color: #475569; }
+    .btn-update {
+      background: linear-gradient(135deg, #7c3aed, #2563eb);
+      border: none; border-radius: 10px; color: #fff;
+      padding: 8px 16px; font-size: 0.8rem; font-weight: 700;
+      font-family: 'Inter', sans-serif; cursor: pointer; white-space: nowrap;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .btn-update:hover  { opacity: 0.88; }
+    .btn-update:active { transform: scale(0.96); }
+
+    /* ── Cards grid ── */
+    .grid {
+      display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;
+      width: 100%; max-width: 560px;
+    }
+
+    .qr-card {
+      flex: 1; min-width: 220px; max-width: 260px;
+      background: var(--glass); border: 1px solid var(--border);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-radius: 24px; padding: 28px 22px 22px;
+      display: flex; flex-direction: column; align-items: center; gap: 14px;
+    }
+
+    .qr-icon {
+      width: 52px; height: 52px; border-radius: 15px;
+      display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+    }
+    .qr-icon.wifi    { background: linear-gradient(135deg,#7c3aed,#2563eb); box-shadow: 0 4px 18px rgba(124,58,237,0.45); }
+    .qr-icon.profile { background: linear-gradient(135deg,#db2777,#f472b6); box-shadow: 0 4px 18px rgba(219,39,119,0.45); }
+
+    .qr-title { font-size: 1rem; font-weight: 700; text-align: center; }
+    .qr-desc  { font-size: 0.75rem; color: var(--muted); text-align: center; line-height: 1.55; }
+
+    .qr-box {
+      background: #fff; padding: 12px; border-radius: 16px;
+      line-height: 0; box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+    }
+    /* Placeholder while QR not generated */
+    .qr-placeholder {
+      width: 200px; height: 200px; border-radius: 8px;
+      background: rgba(255,255,255,0.06); border: 2px dashed rgba(255,255,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; color: var(--muted); text-align: center; padding: 16px;
+    }
+
+    .qr-hint {
+      font-size: 0.68rem; color: #64748b;
+      text-align: center; line-height: 1.5;
+      word-break: break-all; max-width: 200px;
+    }
+
+    /* ── Actions ── */
+    .actions { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+
+    .btn {
+      display: flex; align-items: center; gap: 8px;
+      border: 1px solid var(--border); border-radius: 12px;
+      padding: 11px 22px; font-size: 0.85rem; font-weight: 600;
+      font-family: 'Inter', sans-serif; cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-print {
+      background: var(--glass); color: var(--text);
+    }
+    .btn-print:hover { background: rgba(255,255,255,0.1); }
+    .btn-hub {
+      background: linear-gradient(135deg, rgba(124,58,237,0.2), rgba(37,99,235,0.2));
+      border-color: rgba(124,58,237,0.3); color: #a78bfa;
+      text-decoration: none;
+    }
+    .btn-hub:hover { background: rgba(124,58,237,0.25); }
+    .btn:active { transform: scale(0.97); }
+
+    /* ── Print ── */
+    @media print {
+      body { background: #fff; color: #0f172a; padding: 20px; gap: 24px; }
+      .orb, .url-bar, .actions { display: none !important; }
+      .qr-card {
+        background: #fff; border: 1.5px solid #e2e8f0;
+        backdrop-filter: none; box-shadow: none; break-inside: avoid;
+      }
+      .qr-title, .qr-desc, .qr-hint { color: #334155 !important; }
+      .header-name { -webkit-text-fill-color: #1e293b; background: none; color: #1e293b; }
+      .header-sub  { color: #64748b !important; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-name">Binesh Bidari</div>
+  <div class="header-sub">🇬🇧 UK Education Counselor · Royal Educational Foundation</div>
+</div>
+
+<!-- URL input (hidden on print) -->
+<div class="url-bar no-print">
+  <label>🔗 Hub URL</label>
+  <input type="url" id="urlInput" placeholder="https://yourusername.github.io/digital-hub/" />
+  <button class="btn-update" onclick="updateProfileQR()">Update QR</button>
+</div>
+
+<!-- QR Cards -->
+<div class="grid">
+
+  <!-- WiFi -->
+  <div class="qr-card">
+    <div class="qr-icon wifi">📶</div>
+    <div class="qr-title">Free WiFi</div>
+    <div class="qr-desc">Point your camera here<br/>to connect instantly</div>
+    <div class="qr-box" id="wifiQR"></div>
+    <div class="qr-hint" id="wifiHint"></div>
+  </div>
+
+  <!-- Profile -->
+  <div class="qr-card">
+    <div class="qr-icon profile">👤</div>
+    <div class="qr-title">My Digital Hub</div>
+    <div class="qr-desc">Scan to view contacts,<br/>socials &amp; more</div>
+    <div class="qr-box" id="profileQR">
+      <div class="qr-placeholder">Enter your GitHub Pages URL above &amp; tap Update QR</div>
+    </div>
+    <div class="qr-hint" id="profileHint"></div>
+  </div>
+
+</div>
+
+<!-- Actions -->
+<div class="actions">
+  <button class="btn btn-print" onclick="window.print()">🖨️ Print / Save PDF</button>
+  <a class="btn btn-hub" id="hubLink" href="#" target="_blank" rel="noopener">🌐 Open Hub</a>
+</div>
+
+<script>
+  const SSID     = "Krishna 5G@Classic Tech";
+  const PASSWORD = "classic@01";
+
+  // ── WiFi QR — always generated ──────────────────────────
+  new QRCode(document.getElementById('wifiQR'), {
+    text:         `WIFI:S:${SSID};T:WPA;P:${PASSWORD};;`,
+    width:        200, height: 200,
+    colorDark:    "#000000", colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.M
+  });
+  document.getElementById('wifiHint').textContent = `Network: ${SSID}`;
+
+  // ── Profile QR ───────────────────────────────────────────
+  function generateProfileQR(url) {
+    const box = document.getElementById('profileQR');
+    box.innerHTML = '';
+    new QRCode(box, {
+      text:         url,
+      width:        200, height: 200,
+      colorDark:    "#000000", colorLight: "#ffffff",
+      correctLevel: QRCode.CorrectLevel.M
+    });
+    document.getElementById('profileHint').textContent = url;
+    document.getElementById('hubLink').href = url;
+  }
+
+  function updateProfileQR() {
+    const url = document.getElementById('urlInput').value.trim();
+    if (!url || !url.startsWith('http')) {
+      alert('Please enter a valid URL starting with https://');
+      return;
+    }
+    generateProfileQR(url);
+  }
+
+  // Auto-generate if already hosted (not file://)
+  if (window.location.protocol !== 'file:') {
+    const auto = window.location.href.replace('qr.html', 'index.html');
+    document.getElementById('urlInput').value = auto;
+    generateProfileQR(auto);
+  }
+</script>
+
+</body>
+</html>

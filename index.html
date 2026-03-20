@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0a0f" />
+  <title>Binesh Bidari — UK Education Counselor</title>
+  <meta name="description" content="UK Education Counselor based in Kathmandu. Connect with Binesh Bidari for UK study abroad guidance." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --glass-bg:     rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.11);
+      --glass-shadow: 0 8px 40px rgba(0,0,0,0.45);
+      --accent:  #a78bfa;
+      --accent2: #60a5fa;
+      --accent3: #f472b6;
+      --text:    #f1f5f9;
+      --muted:   #94a3b8;
+      --green:   #25d366;
+    }
+
+    html, body {
+      min-height: 100%; font-family: 'Inter', sans-serif;
+      background: #0a0a0f; color: var(--text); overflow-x: hidden;
+    }
+
+    /* ── Background ── */
+    .bg-canvas {
+      position: fixed; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse at 15% 15%, #1e1040 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 85%, #0c1a3a 0%, transparent 55%),
+        #0a0a0f;
+    }
+    .orb {
+      position: fixed; border-radius: 50%; filter: blur(90px);
+      opacity: 0.3; z-index: 0; animation: drift 10s ease-in-out infinite alternate;
+    }
+    .orb-1 { width: 500px; height: 500px; background: #6d28d9; top: -160px; left: -140px; animation-delay: 0s; }
+    .orb-2 { width: 380px; height: 380px; background: #1d4ed8; bottom: -100px; right: -100px; animation-delay: -4s; }
+    .orb-3 { width: 240px; height: 240px; background: #be185d; top: 45%; left: 55%; animation-delay: -7s; }
+
+    @keyframes drift {
+      from { transform: translate(0,0) scale(1); }
+      to   { transform: translate(40px, 50px) scale(1.1); }
+    }
+
+    /* ── Layout ── */
+    .page {
+      position: relative; z-index: 1;
+      min-height: 100dvh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 48px 20px 56px; gap: 22px;
+    }
+
+    /* ── Staggered entrance ── */
+    .enter { opacity: 0; transform: translateY(28px); animation: riseUp 0.65s cubic-bezier(0.22,1,0.36,1) forwards; }
+    .enter:nth-child(1) { animation-delay: 0.05s; }
+    .enter:nth-child(2) { animation-delay: 0.2s; }
+    .enter:nth-child(3) { animation-delay: 0.35s; }
+    .enter:nth-child(4) { animation-delay: 0.5s; }
+    @keyframes riseUp { to { opacity: 1; transform: translateY(0); } }
+
+    /* ── Profile ── */
+    .profile { display: flex; flex-direction: column; align-items: center; gap: 18px; text-align: center; }
+
+    .avatar-wrap {
+      position: relative; width: 118px; height: 118px; border-radius: 50%;
+      animation: pulse 3.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(167,139,250,0.6), 0 0 40px 8px rgba(167,139,250,0.25); }
+      50%      { box-shadow: 0 0 0 10px rgba(167,139,250,0), 0 0 70px 18px rgba(96,165,250,0.3); }
+    }
+    .avatar-wrap img, .avatar-fallback {
+      width: 100%; height: 100%; border-radius: 50%;
+      object-fit: cover; display: block;
+      border: 3px solid rgba(255,255,255,0.18);
+    }
+    .avatar-fallback {
+      background: linear-gradient(135deg, #7c3aed, #2563eb);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem; font-weight: 800; color: #fff;
+      position: absolute; inset: 0;
+    }
+
+    /* UK flag badge */
+    .badge {
+      position: absolute; bottom: 2px; right: 2px;
+      width: 28px; height: 28px; border-radius: 50%;
+      background: #fff; border: 2px solid rgba(255,255,255,0.3);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.95rem; box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .name {
+      font-size: 1.85rem; font-weight: 800; letter-spacing: -0.6px;
+      background: linear-gradient(135deg, #e9e3ff 0%, #a78bfa 45%, #60a5fa 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .role {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(167,139,250,0.12); border: 1px solid rgba(167,139,250,0.25);
+      border-radius: 20px; padding: 5px 14px;
+      font-size: 0.82rem; font-weight: 500; color: var(--accent);
+      letter-spacing: 0.3px;
+    }
+    .bio {
+      font-size: 0.88rem; color: var(--muted); max-width: 270px;
+      line-height: 1.65; font-weight: 400;
+    }
+
+    /* ── Glass card ── */
+    .card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(24px) saturate(160%);
+      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      border-radius: 22px;
+      box-shadow: var(--glass-shadow);
+      width: 100%; max-width: 390px;
+    }
+
+    /* ── Contact accordion header ── */
+    .card-header {
+      padding: 18px 22px;
+      display: flex; align-items: center; justify-content: space-between;
+      cursor: pointer; user-select: none; border-radius: 22px;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.2s;
+    }
+    .card-header:hover { background: rgba(255,255,255,0.04); }
+    .card-header-left { display: flex; align-items: center; gap: 14px; }
+
+    .header-icon {
+      width: 46px; height: 46px; border-radius: 13px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 1.15rem;
+      background: linear-gradient(135deg, #7c3aed, #a855f7);
+      box-shadow: 0 4px 18px rgba(124,58,237,0.45);
+    }
+    .header-title { font-size: 1rem; font-weight: 700; }
+    .header-sub   { font-size: 0.76rem; color: var(--muted); margin-top: 2px; }
+
+    .chevron {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); font-size: 0.75rem; flex-shrink: 0;
+      transition: transform 0.4s cubic-bezier(0.4,0,0.2,1), background 0.2s;
+    }
+    .chevron.open { transform: rotate(180deg); background: rgba(167,139,250,0.15); color: var(--accent); }
+
+    /* ── Accordion body ── */
+    .accordion {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.4s ease;
+      opacity: 0;
+    }
+    .accordion.open { max-height: 800px; opacity: 1; }
+
+    .accordion-inner {
+      padding: 4px 22px 22px;
+      display: flex; flex-direction: column; gap: 14px;
+    }
+
+    .sep { height: 1px; background: rgba(255,255,255,0.07); margin: 2px 0; }
+
+    /* ── Info rows ── */
+    .info-row {
+      display: flex; align-items: center; gap: 14px;
+      text-decoration: none; color: inherit;
+      border-radius: 12px; padding: 6px 4px;
+      transition: background 0.18s;
+    }
+    .info-row:hover { background: rgba(255,255,255,0.04); }
+
+    .info-icon {
+      width: 40px; height: 40px; border-radius: 11px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 1rem;
+    }
+    .ic-wa    { background: rgba(37,211,102,0.14);  color: #25d366; }
+    .ic-email { background: rgba(96,165,250,0.14);  color: #60a5fa; }
+    .ic-loc   { background: rgba(251,191,36,0.14);  color: #fbbf24; }
+
+    .info-label { font-size: 0.72rem; color: var(--muted); margin-bottom: 2px; }
+    .info-value { font-size: 0.9rem; font-weight: 500; }
+
+    .wa-badge {
+      display: inline-block; font-size: 0.65rem; font-weight: 600;
+      background: rgba(37,211,102,0.15); color: #25d366;
+      border: 1px solid rgba(37,211,102,0.25);
+      border-radius: 6px; padding: 1px 7px; margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    /* ── Socials ── */
+    .socials { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .soc {
+      width: 54px; height: 54px; border-radius: 15px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; text-decoration: none; color: #fff;
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.2s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .soc:hover, .soc:active { transform: scale(1.2) translateY(-2px); }
+    .soc.ig  { background: linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045); box-shadow: 0 4px 18px rgba(253,29,29,0.3); }
+    .soc.li  { background: #0a66c2; box-shadow: 0 4px 18px rgba(10,102,194,0.35); }
+    .soc.fb  { background: #1877f2; box-shadow: 0 4px 18px rgba(24,119,242,0.4); }
+    .soc.tt  { background: #010101; box-shadow: 0 4px 18px rgba(0,0,0,0.5); border-color: rgba(255,255,255,0.12); }
+
+    /* ── Save button ── */
+    .btn-save {
+      width: 100%; padding: 15px; border: none; border-radius: 13px; cursor: pointer;
+      font-family: 'Inter', sans-serif; font-size: 0.95rem; font-weight: 700;
+      color: #fff; letter-spacing: 0.2px;
+      background: linear-gradient(135deg, #059669, #10b981);
+      box-shadow: 0 4px 22px rgba(16,185,129,0.38);
+      position: relative; overflow: hidden;
+      transition: transform 0.15s, box-shadow 0.15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-save::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.13), transparent);
+    }
+    .btn-save:hover  { transform: scale(1.02); box-shadow: 0 6px 30px rgba(16,185,129,0.52); }
+    .btn-save:active { transform: scale(0.97); }
+
+    /* ── Ripple ── */
+    .rip { position: relative; overflow: hidden; }
+    .ripple-dot {
+      position: absolute; border-radius: 50%;
+      background: rgba(255,255,255,0.22);
+      transform: scale(0); animation: ripOut 0.55s linear forwards;
+      pointer-events: none;
+    }
+    @keyframes ripOut { to { transform: scale(4); opacity: 0; } }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed; bottom: 36px; left: 50%;
+      transform: translateX(-50%) translateY(90px);
+      background: rgba(15,15,30,0.96); border: 1px solid rgba(255,255,255,0.1);
+      backdrop-filter: blur(24px); border-radius: 14px;
+      padding: 13px 24px; font-size: 0.87rem; font-weight: 500;
+      color: var(--text); z-index: 999; white-space: nowrap;
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s;
+      opacity: 0; pointer-events: none;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    /* ── Footer ── */
+    .footer {
+      font-size: 0.7rem; color: rgba(148,163,184,0.35);
+      text-align: center; letter-spacing: 1px; text-transform: uppercase;
+    }
+
+    @media (max-width: 390px) {
+      .name { font-size: 1.6rem; }
+      .page { padding: 36px 16px 48px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-canvas"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<main class="page">
+
+  <!-- ── Profile ── -->
+  <div class="profile enter">
+    <div class="avatar-wrap">
+      <img
+        src="https://scontent.fktm24-1.fna.fbcdn.net/v/t39.30808-6/631208523_122094541821271481_1803183330478898737_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=1d70fc&_nc_ohc=D97kmEMzNC4Q7kNvwEPTmC3&_nc_oc=AdoZDOkwDdZFWv0jrHYsLBGQKqtYlCyVOtlzmdHywmF4tEgh4DXo_jyD1wyNiXGiWbEXT989kN_NKB7Nxk7FG1Kx&_nc_zt=23&_nc_ht=scontent.fktm24-1.fna&_nc_gid=Roa31pUFDupcBk4EJDZTJw&_nc_ss=8&oh=00_Afx_aEik83XWoSH8I2mtYFWb-gG4ofLzCVX_JNphEib1Mg&oe=69C16057"
+        alt="Binesh Bidari"
+        onerror="this.style.display='none';document.getElementById('fb').style.display='flex';"
+      />
+      <div class="avatar-fallback" id="fb" style="display:none;">BB</div>
+      <div class="badge">🇬🇧</div>
+    </div>
+    <div>
+      <div class="name">Binesh Bidari</div>
+    </div>
+    <div class="role"><i class="fa-solid fa-graduation-cap" style="font-size:0.8rem;"></i> UK Education Counselor</div>
+    <p class="bio">Helping Nepali students find their path to top UK universities. Let's make your dream a reality.</p>
+  </div>
+
+  <!-- ── Contact & Socials Card ── -->
+  <div class="card enter">
+    <div class="card-header" id="cardToggle" onclick="toggleCard()" role="button" aria-expanded="false">
+      <div class="card-header-left">
+        <div class="header-icon">👤</div>
+        <div>
+          <div class="header-title">Contact &amp; Socials</div>
+          <div class="header-sub">Tap to expand</div>
+        </div>
+      </div>
+      <div class="chevron" id="chevron"><i class="fa-solid fa-chevron-down"></i></div>
+    </div>
+
+    <div class="accordion" id="accordion">
+      <div class="accordion-inner">
+        <div class="sep"></div>
+
+        <!-- WhatsApp -->
+        <a class="info-row" id="waLink" href="#" target="_blank" rel="noopener">
+          <div class="info-icon ic-wa"><i class="fa-brands fa-whatsapp"></i></div>
+          <div>
+            <div class="info-label">WhatsApp <span class="wa-badge">Chat only</span></div>
+            <div class="info-value" id="waNum">+977 9764340881</div>
+          </div>
+        </a>
+
+        <!-- Email -->
+        <a class="info-row" href="mailto:uk1.royaledu@gmail.com">
+          <div class="info-icon ic-email"><i class="fa-solid fa-envelope"></i></div>
+          <div>
+            <div class="info-label">Email</div>
+            <div class="info-value">uk1.royaledu@gmail.com</div>
+          </div>
+        </a>
+
+        <!-- Location -->
+        <a class="info-row" href="https://www.google.com/maps/place/ROYAL+EDUCATIONAL+FOUNDATION/@27.6881638,85.330002,17z/data=!3m1!4b1!4m6!3m5!1s0x39eb1995fcc72b47:0x8c67d732316fdc08!8m2!3d27.6881639!4d85.3348729!16s%2Fg%2F11b6ghfbf8" target="_blank" rel="noopener">
+          <div class="info-icon ic-loc"><i class="fa-solid fa-location-dot"></i></div>
+          <div>
+            <div class="info-label">Location <span style="font-size:0.65rem;color:#fbbf24;margin-left:4px;">↗ Maps</span></div>
+            <div class="info-value">New Baneshwor, Kathmandu</div>
+          </div>
+        </a>
+
+        <div class="sep"></div>
+
+        <!-- Socials -->
+        <div class="socials">
+          <a href="https://www.instagram.com/royaledunepal/" target="_blank" rel="noopener" class="soc ig" aria-label="Instagram">
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+          <a href="https://np.linkedin.com/company/royal-educational-foundation" target="_blank" rel="noopener" class="soc li" aria-label="LinkedIn">
+            <i class="fa-brands fa-linkedin-in"></i>
+          </a>
+          <a href="https://www.facebook.com/royaleducation.edu.np/" target="_blank" rel="noopener" class="soc fb" aria-label="Facebook">
+            <i class="fa-brands fa-facebook-f"></i>
+          </a>
+          <a href="https://www.tiktok.com/@royaleduktm" target="_blank" rel="noopener" class="soc tt" aria-label="TikTok">
+            <i class="fa-brands fa-tiktok"></i>
+          </a>
+        </div>
+
+        <!-- Save to Contacts -->
+        <button class="btn-save rip" onclick="saveVCard(this, event)">
+          <i class="fa-solid fa-address-card" style="margin-right:8px;"></i>Save to Contacts
+        </button>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="footer enter">Royal Educational Foundation · Kathmandu</div>
+
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+  const C = {
+    name:      "Binesh Bidari",
+    phone:     "+9779764340881",
+    phoneDisp: "+977 9764340881",
+    email:     "uk1.royaledu@gmail.com",
+    org:       "Royal Educational Foundation",
+    location:  "New Baneshwor, Kathmandu, Nepal",
+    instagram: "https://www.instagram.com/royaledunepal/",
+    linkedin:  "https://np.linkedin.com/company/royal-educational-foundation",
+    facebook:  "https://www.facebook.com/royaleducation.edu.np/",
+    tiktok:    "https://www.tiktok.com/@royaleduktm",
+  };
+
+  // Sync WhatsApp
+  const clean = C.phone.replace(/[^0-9]/g, '');
+  document.getElementById('waNum').textContent  = C.phoneDisp;
+  document.getElementById('waLink').href        = `https://wa.me/${clean}`;
+
+  // ── Accordion ──────────────────────────────────────────
+  let open = false;
+  function toggleCard() {
+    open = !open;
+    document.getElementById('accordion').classList.toggle('open', open);
+    document.getElementById('chevron').classList.toggle('open', open);
+    document.getElementById('cardToggle').setAttribute('aria-expanded', open);
+    if (open) toast('👤 Here\'s how to reach me');
+  }
+
+  // ── vCard download ─────────────────────────────────────
+  function saveVCard(btn, e) {
+    ripple(btn, e);
+    const vcf = [
+      "BEGIN:VCARD", "VERSION:3.0",
+      `FN:${C.name}`,
+      `N:Bidari;Binesh;;;`,
+      `ORG:${C.org}`,
+      `TITLE:UK Education Counselor`,
+      `TEL;TYPE=WHATSAPP,CELL:${C.phone}`,
+      `EMAIL;TYPE=WORK:${C.email}`,
+      `ADR;TYPE=WORK:;;${C.location};;;;`,
+      `URL:${C.facebook}`,
+      `X-SOCIALPROFILE;type=instagram:${C.instagram}`,
+      `X-SOCIALPROFILE;type=linkedin:${C.linkedin}`,
+      `X-SOCIALPROFILE;type=facebook:${C.facebook}`,
+      `X-SOCIALPROFILE;type=tiktok:${C.tiktok}`,
+      "END:VCARD"
+    ].join("\r\n");
+
+    const a = Object.assign(document.createElement('a'), {
+      href: URL.createObjectURL(new Blob([vcf], { type: 'text/vcard' })),
+      download: 'Binesh_Bidari.vcf'
+    });
+    document.body.appendChild(a); a.click();
+    document.body.removeChild(a);
+    toast('📇 Contact saved to your device');
+  }
+
+  // ── Toast ──────────────────────────────────────────────
+  let toastTimer;
+  function toast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg; el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+  }
+
+  // ── Ripple ─────────────────────────────────────────────
+  function ripple(el, e) {
+    const r = el.getBoundingClientRect();
+    const s = Math.max(r.width, r.height);
+    const x = (e?.clientX ?? r.left + r.width / 2)  - r.left - s / 2;
+    const y = (e?.clientY ?? r.top  + r.height / 2) - r.top  - s / 2;
+    const d = document.createElement('span');
+    d.className = 'ripple-dot';
+    d.style.cssText = `width:${s}px;height:${s}px;left:${x}px;top:${y}px;`;
+    el.appendChild(d);
+    d.addEventListener('animationend', () => d.remove());
+  }
+</script>
+</body>
+</html>
